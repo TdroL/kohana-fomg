@@ -1,0 +1,63 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="pl-pl"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" lang="pl-pl"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="pl-pl"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="pl-pl"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+
+	<title>Fomg examples</title>
+
+	<meta name="author" content="tdroL">
+
+	{{! Mobile viewport optimized: j.mp/bplateviewport }}
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+
+	{{#css}}
+	<link rel="stylesheet" href="{{.}}">
+	{{/css}}
+</head>
+
+<body>
+
+	<header>
+
+	</header>
+	<div role="main">
+		{{#form}}{{&open}}
+
+		<div>
+			{{&label.title}}
+			{{&field.title}}
+		</div>
+		<div>
+			{{&label.body}}
+			{{&field.body}}
+		</div>
+		<div>
+			{{&label.date}}
+			{{&field.date}}
+		</div>
+		<div>
+			{{&label.user}}
+			{{&field.user}}
+		</div>
+		<div>
+			{{&submit}}
+			{{&cancel}}
+		</div>
+
+		{{&close}}{{/form}}
+	</div>
+	<footer>
+
+	</footer>
+
+	<script src="{{jquery.cdn}}"></script>
+	<script>window.jQuery || document.write('<script src="{{jquery.local}}"><\/script>')</script>
+
+	{{#js}}
+	<script src="{{.}}"></script>
+	{{/js}}
+</body>
+</html>

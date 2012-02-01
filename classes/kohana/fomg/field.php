@@ -30,10 +30,9 @@ class Kohana_Fomg_Field {
 		return '[Unknown field type]';
 	}
 
-	public function attr()
+	public function attr(array $attr = array())
 	{
 		$rules = $this->field->rules;
-		$attr = array();
 
 		foreach ($rules as $rule)
 		{

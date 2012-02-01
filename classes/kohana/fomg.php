@@ -42,17 +42,7 @@ class Kohana_Fomg {
 				$this->$key = array();
 			}
 
-			if ($path == '*')
-			{
-				foreach ($this->$key as & $elem)
-				{
-					$elem = $value;
-				}
-			}
-			else
-			{
-				Arr::set_path($this->$key, $path, $value);
-			}
+			Arr::set_path($this->$key, $path, $value);
 
 			return $this;
 		}
@@ -63,20 +53,43 @@ class Kohana_Fomg {
 
 	public function open()
 	{
-		return Form::open($this->url['action'], array(
-			'id' => $this->id,
-			'enctype' => 'multipart/form-data'
-		));
+		$attr = Arr::get($this->attr, 'form', array());
+
+		$attr['id'] = Arr::get($attr, 'id', $this->id);
+		$attr['enctype'] = Arr::get($attr, 'enctype', 'multipart/form-data');
+		if ($class = Arr::get($this->class, 'form'))
+		{
+			$attr['class'] = $class;
+		}
+
+		return Form::open($this->url['action'], $attr);
 	}
 
 	public function label()
 	{
 		$labels = array();
 
+		$default_attr = Arr::get($this->attr, 'label:all', array());
+		$default_class = Arr::get($this->class, 'label:all');
+
+		$inputs_attr = Arr::get($this->attr, 'input', array());
+		$labels_attr = Arr::get($this->attr, 'label', array());
+		$labels_class = Arr::get($this->class, 'label', array());
+
 		foreach ($this->labels as $name => $label)
 		{
-			$name = Arr::path($this->attr, $name.'.id', $name);
-			$labels[$name] = Form::label($this->id.'-'.$name, $label);
+			$name = Arr::path($inputs_attr, $name.'.id', $name);
+
+			$attr = Arr::get($labels_attr, $name, $default_attr);
+
+			if ($class = Arr::get($labels_class, $name, $default_class))
+			{
+				$attr += array(
+					'class' => $class,
+				);
+			}
+
+			$labels[$name] = Form::label($this->id.'-'.$name, $label, $attr);
 		}
 
 		return $labels;
@@ -86,21 +99,27 @@ class Kohana_Fomg {
 	{
 		$fields = array();
 
+		$default_attr = Arr::get($this->attr, 'input:all', array());
+		$default_class = Arr::get($this->class, 'input:all');
+
+		$inputs_attr = Arr::get($this->attr, 'input', array());
+		$inputs_class = Arr::get($this->class, 'input', array());
+
 		foreach ($this->fields as $name => $field)
 		{
-			$attr = Arr::get($this->attr, $name, array());
+			$attr = Arr::get($inputs_attr, $name, $default_attr);
 			$attr += array(
 				'id' => $this->id.'-'.$name,
 			);
 
-			if ($class = Arr::get($this->class, $name))
+			if ($class = Arr::get($inputs_class, $name, $default_class))
 			{
 				$attr += array(
 					'class' => $class,
 				);
 			}
 
-			$attr += $field->attr();
+			$attr = $field->attr($attr);
 
 			$fields[$name] = $field->render($attr);
 		}
@@ -159,8 +178,6 @@ class Kohana_Fomg {
 		foreach ($fields as $key => $field)
 		{
 			$this->labels[$key] = __($field->label);
-			$this->attr[$key] = array();
-			$this->class[$key] = '';
 
 			if (isset($override[$key]))
 			{

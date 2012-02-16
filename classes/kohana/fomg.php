@@ -165,6 +165,32 @@ class Kohana_Fomg {
 			Form::close();
 	}
 
+	public function as_array(array $fields = NULL)
+	{
+		$result = array();
+
+		if ($fields === NULL)
+		{
+			$fields = array('id', 'url', 'open', 'close', 'label', 'field', 'fields');
+		}
+
+		foreach ($fields as $field)
+		{
+			$result[$field] = NULL;
+
+			if (is_callable(array($this, $field)))
+			{
+				$result[$field] = call_user_func(array($this, $field));
+			}
+			elseif(isset($this->{$field}))
+			{
+				$result[$field] = $this->{$field};
+			}
+		}
+
+		return $result;
+	}
+
 	protected function _process()
 	{
 		$fields = $this->model->meta()->fields();

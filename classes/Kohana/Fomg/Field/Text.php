@@ -6,6 +6,6 @@ class Kohana_Fomg_Field_Text extends Fomg_Field {
 	{
 		$name = $this->field->name;
 
-		return Form::textarea($name, $this->model->__get($name), $attr);
+		return Form::textarea($name, $this->value(), $attr);
 	}
 }

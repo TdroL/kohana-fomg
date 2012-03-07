@@ -8,6 +8,6 @@ class Kohana_Fomg_Field_Primary extends Fomg_Field {
 
 		unset($attr['class']);
 
-		return Form::hidden($name, $this->model->__get($name), $attr);
+		return Form::hidden($name, $this->value(), $attr);
 	}
 }

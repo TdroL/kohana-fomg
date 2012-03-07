@@ -6,6 +6,6 @@ class Kohana_Fomg_Field_String extends Fomg_Field {
 	{
 		$name = $this->field->name;
 
-		return Form::input($name, $this->model->__get($name), $attr);
+		return Form::input($name, $this->value(), $attr);
 	}
 }

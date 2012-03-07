@@ -4,13 +4,14 @@ class Kohana_Fomg {
 
 	protected $config;
 	protected $model;
-	protected $allow = '*';
+	protected $allowed = '*';
 	protected $class = array();
 	protected $attr = array();
 
 	protected $labels = array();
 	protected $fields = array();
 	protected $errors = array();
+	protected $plain = FALSE;
 
 	public $id;
 	public $url = array(
@@ -89,7 +90,13 @@ class Kohana_Fomg {
 				);
 			}
 
-			$labels[$name] = Form::label($this->id.'-'.$name, $label, $attr);
+			$labels[$name] = $label;
+
+			if ( ! $this->plain)
+			{
+				$labels[$name] = Form::label($this->id.'-'.$name, $label, $attr);
+			}
+
 		}
 
 		return $labels;
@@ -121,7 +128,14 @@ class Kohana_Fomg {
 
 			$attr = $field->attr($attr);
 
-			$fields[$name] = $field->render($attr);
+			if ( ! $this->plain)
+			{
+				$fields[$name] = $field->render($attr, $this->plain);
+			}
+			else
+			{
+				$fields[$name] = $field->plain();
+			}
 		}
 
 		return $fields;

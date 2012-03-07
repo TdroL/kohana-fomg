@@ -8,7 +8,11 @@ class Kohana_Fomg_Field {
 
 	public static function factory($type, $model, $field, $fomg)
 	{
-		$class_name = 'fomg_field_'.$type;
+		$class_name = strtolower('fomg_field_'.$type);
+		$class_name = str_replace('_', ' ', $class_name);
+		$class_name = ucwords($class_name);
+		$class_name = str_replace(' ', '_', $class_name);
+
 		if (class_exists($class_name))
 		{
 			$object = new $class_name;
@@ -23,6 +27,16 @@ class Kohana_Fomg_Field {
 		$object->fomg  = $fomg;
 
 		return $object;
+	}
+
+	public function value()
+	{
+		return $this->model->__get($this->field->name);
+	}
+
+	public function plain()
+	{
+		return $this->value();
 	}
 
 	public function render(array $attr = array())
